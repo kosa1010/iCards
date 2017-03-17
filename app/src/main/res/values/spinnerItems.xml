@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="spinnerItems">
+        <item>Vitay</item>
+        <item>Tesco ClubCard</item>
+        <item> Inne</item>
+    </string-array>
+</resources>
