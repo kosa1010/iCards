@@ -1,13 +1,16 @@
-package com.example.kosa1010.icards.activities;
+package com.example.kosa1010.icards;
 
 import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.FragmentManager;
-import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
@@ -27,9 +30,8 @@ import com.example.kosa1010.icards.fragments.AddCardFragment;
 import com.example.kosa1010.icards.fragments.DeleteCardFragment;
 import com.example.kosa1010.icards.fragments.EditCardFragment;
 import com.example.kosa1010.icards.fragments.HomeFragment;
-import com.example.kosa1010.icards.logic.CircleTransform;
-import com.example.kosa1010.icards.logic.GetGoogleInf;
-import com.example.kosa1010.icards.R;
+import com.example.kosa1010.icards.controllers.CircleTransform;
+import com.example.kosa1010.icards.controllers.GetGoogleInf;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.AccountPicker;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -47,16 +49,14 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import static com.example.kosa1010.icards.R.id.txtLogin;
-
-
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     NavigationView navigationView;
     FragmentManager fm;
     boolean add = false;
-    private boolean viewIsAtHome;
+    boolean doubleBackToExitPressedOnce = false;
+    public static MainActivity mainActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,13 +68,14 @@ public class MainActivity extends AppCompatActivity
         FragmentManager fm = getFragmentManager();
 
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FloatingActionButton fabb = fab;
-                clickFAB(fabb);
-            }
-        });
+//        fab.setOnClickListener(new View.OnClickListener() {
+        fab.setVisibility(View.GONE);
+//            @Override
+//            public void onClick(View view) {
+//                FloatingActionButton fabb = fab;
+//                clickFAB(fabb);
+//            }
+//        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -85,7 +86,8 @@ public class MainActivity extends AppCompatActivity
 //        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
 //                .requestEmail()
 //                .build();
-
+//        cardsList = (ListView) findViewById(R.id.lvCards);
+//        cardsList.setAdapter(new CardsListAdapter());
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         getSupportActionBar().setTitle("Twoje karty");
@@ -112,33 +114,45 @@ public class MainActivity extends AppCompatActivity
 
         String[] accountInfo = getInfo(s);
         samText.setText(accountInfo[0]);
-        imgProfile = (ImageView) headerView.findViewById(R.id.avatar);
-        URL imageurl = getImage(accountInfo[1]);
-        Picasso.with(this) // Context
-                .load(String.valueOf(imageurl)) // URL or file
-                .resize(120, 120)
-                .transform(new CircleTransform())
-                .into(imgProfile);
-
-
+        if (isOnline()) {
+            imgProfile = (ImageView) headerView.findViewById(R.id.avatar);
+            URL imageurl = getImage(accountInfo[1]);
+            Picasso.with(this) // Context
+                    .load(String.valueOf(imageurl)) // URL or file
+                    .resize(120, 120)
+                    .transform(new CircleTransform())
+                    .into(imgProfile);
+        }
+        mainActivity = this;
         fm.beginTransaction().replace(R.id.content_frame, new HomeFragment())
                 .addToBackStack("main").commit();
-//        fm.beginTransaction().replace(R.id.content_main, new Add)
-//        displayView(R.id.nav_delete);
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            finish();
+            return;
         }
-        if (!viewIsAtHome) { //if the current view is not the News fragment
-            fm.beginTransaction().replace(R.id.content_frame, new HomeFragment()).commit();
-//            displayView(R.id.nav_add); //display the News fragment
-        } else {
-            moveTaskToBack(true);  //If view is in News fragment, exit application
-        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Naciśnij ponownie aby zamknąć aplikację", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 2000);
     }
 
     @Override
@@ -154,32 +168,33 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
+//        String title = "";
+//        FragmentManager fm = getFragmentManager();
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+//        if (id == R.id.action_settings) {
+//            add = true;
+//            title = "Karta briju";
+//            fm.beginTransaction().replace(R.id.content_frame, new ShowCardFragment()).commit();
+//            return true;
+//        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().setTitle(title);
+//        }
+//
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        drawer.closeDrawer(GravityCompat.START);
+
         return super.onOptionsItemSelected(item);
     }
-
-//    @SuppressWarnings("StatementWithEmptyBody")
-//    @Override
-//    public boolean onNavigationItemSelected(MenuItem item) {
-//        displayView(item.getItemId());
-//        return true;
-//    }
-
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        Fragment fragment = null;
         String title = getString(R.string.app_name);
         FragmentManager fm = getFragmentManager();
         if (id == R.id.nav_add) {
-//            fragment = new AddCardFragment();
             add = true;
             title = "Dodawanie karty";
             fm.beginTransaction().replace(R.id.content_frame, new AddCardFragment()).commit();
@@ -189,20 +204,13 @@ public class MainActivity extends AppCompatActivity
             add = false;
         } else if (id == R.id.nav_delete) {
             add = false;
-            title = "Usówanie karty";
+            title = "Usuwanie karty";
             fm.beginTransaction().replace(R.id.content_frame, new DeleteCardFragment()).commit();
         } else if (id == R.id.nav_edit) {
             add = false;
             title = "Edycja karty";
             fm.beginTransaction().replace(R.id.content_frame, new EditCardFragment()).commit();
         }
-
-//        if (fragment != null) {
-//            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//            ft.replace(R.id.content_main, fragment);
-//            ft.commit();
-//        }
-//
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(title);
         }
@@ -345,15 +353,13 @@ public class MainActivity extends AppCompatActivity
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-
         return url;
     }
-
 
     public void clickFAB(FloatingActionButton fab) {
         FragmentManager fm = getFragmentManager();
         MenuItem menuItem;
-        if(add){
+        if (add) {
             menuItem = (MenuItem) findViewById(R.id.nav_home);
             menuItem.setChecked(true);
 //            onOptionsItemSelected(menuItem);
@@ -365,8 +371,8 @@ public class MainActivity extends AppCompatActivity
             add = true;
             fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_manage));
         } else {
-             menuItem = (MenuItem) findViewById(R.id.nav_add);
-             menuItem.setChecked(true);
+            menuItem = (MenuItem) findViewById(R.id.nav_add);
+            menuItem.setChecked(true);
 //            onOptionsItemSelected(menuItem);
             fm.beginTransaction().replace(R.id.content_frame, new AddCardFragment()).commit();
 //            getSupportActionBar().setTitle("Dodawanie karty");
@@ -382,6 +388,5 @@ public class MainActivity extends AppCompatActivity
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         AddCardFragment.codeContent = scanningResult.getContents();
         AddCardFragment.codeFormat = scanningResult.getFormatName();
-        AddCardFragment.txtLogin.setText(AddCardFragment.codeContent+" "+AddCardFragment.codeFormat);
     }
 }

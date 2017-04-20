@@ -1,4 +1,4 @@
-package com.example.kosa1010.icards.logic;
+package com.example.kosa1010.icards.controllers;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;

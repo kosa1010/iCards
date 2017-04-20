@@ -1,23 +1,48 @@
 package com.example.kosa1010.icards.model;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 /**
  * Created by kosa1010 on 15.03.17.
  */
-
+@DatabaseTable
 public class Card {
 
-    int id;
+    @DatabaseField(generatedId = true)
+    long id;
+
+    @DatabaseField
     String name;
+
+    @DatabaseField
     String type;
+
+    @DatabaseField
     String code;
+
+    @DatabaseField
     String login;
+
+    @DatabaseField
     String pass;
 
-    public int getId() {
+    public Card() {
+    }
+
+    public Card(String name, String type, String code, String login, String pass) {
+        this.name = name;
+        this.type = type;
+        this.code = code;
+        this.login = login;
+        this.pass = pass;
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

@@ -9,5 +9,9 @@
         android:layout_width="6dp"
         android:layout_height="6dp"
         android:background="@drawable/bg_circle"></LinearLayout>
+    <Button
+    android:layout_width="match_parent"
+    android:layout_height="20dp"
+    android:text="lubieplacki"/>
 
 </LinearLayout>

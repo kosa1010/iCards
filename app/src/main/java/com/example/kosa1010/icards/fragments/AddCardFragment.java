@@ -1,10 +1,8 @@
 package com.example.kosa1010.icards.fragments;
 
 import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,17 +14,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kosa1010.icards.R;
+import com.example.kosa1010.icards.model.Card;
+import com.example.kosa1010.icards.repository.OrmCardsRepository;
 import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 
 /**
  * Created by kosa1010 on 15.03.17.
  */
 
-
 public class AddCardFragment extends Fragment {
 
-    public static TextView txtLogin;
+    public TextView txtLogin;
     public static String codeContent;
     public static String codeFormat;
     private TextView txtPass;
@@ -45,7 +43,7 @@ public class AddCardFragment extends Fragment {
         btnAddCard = (Button) view.findViewById(R.id.btnAddCard);
         btnAddCard.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //Uzupełnić zapisem do bazy danych
+                addNewCard();
             }
         });
         scanQR = (ImageButton) view.findViewById(R.id.scanCode);
@@ -72,14 +70,23 @@ public class AddCardFragment extends Fragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                if (spinner.getSelectedItem() == spinner.getItemAtPosition(2)) {
+//                if (spinner.getSelectedItem() == spinner.getItemAtPosition(2)) {
+//                    txtLogin.setVisibility(View.GONE);
+//                    txtPass.setVisibility(View.INVISIBLE);
+//                    txtCardName.setVisibility(View.VISIBLE);
+//                } else {
+//                    txtLogin.setVisibility(View.VISIBLE);
+//                    txtPass.setVisibility(View.VISIBLE);
+//                    txtCardName.setVisibility(View.GONE);
+//                }
+                if (spinner.getSelectedItemPosition() == 2) {
                     txtLogin.setVisibility(View.GONE);
                     txtPass.setVisibility(View.INVISIBLE);
                     txtCardName.setVisibility(View.VISIBLE);
                 } else {
-                    txtLogin.setVisibility(View.VISIBLE);
-                    txtPass.setVisibility(View.VISIBLE);
-                    txtCardName.setVisibility(View.GONE);
+                    txtLogin.setVisibility(View.GONE);
+                    txtPass.setVisibility(View.INVISIBLE);
+                    txtCardName.setVisibility(View.INVISIBLE);
                 }
             }
 
@@ -88,7 +95,17 @@ public class AddCardFragment extends Fragment {
                 spinner.setSelection(0);
 //                Toast.makeText(parentView, "nie ma nicz", Toast.LENGTH_SHORT).show();
             }
-
         });
+    }
+
+    private void addNewCard() {
+        if(spinner.getSelectedItemPosition() != 2){
+         txtCardName.setText(spinner.getSelectedItem().toString());
+        }
+        Card card = new Card(txtCardName.getText().toString(), codeFormat,
+                codeContent, txtLogin.getText().toString(), txtPass.getText().toString());
+        OrmCardsRepository.addCard(getActivity(), card);
+        Toast.makeText(getActivity(), "Katra została zapisana", Toast.LENGTH_SHORT).show();
+        txtCardName.setText("");
     }
 }
