@@ -1,2 +1,2 @@
-# iCards3
+# iCards
 Aplikacja do zapisywania kodów kart lojalnościowych.
