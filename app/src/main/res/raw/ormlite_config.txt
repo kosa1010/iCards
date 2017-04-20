@@ -1,0 +1,26 @@
+# --table-start--
+dataClass=com.example.kosa1010.icards.model.Card
+tableName=card
+# --table-fields-start--
+# --field-start--
+fieldName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=name
+# --field-end--
+# --field-start--
+fieldName=type
+# --field-end--
+# --field-start--
+fieldName=code
+# --field-end--
+# --field-start--
+fieldName=login
+# --field-end--
+# --field-start--
+fieldName=pass
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################

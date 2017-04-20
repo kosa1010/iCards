@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingBottom="5dp"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    android:paddingTop="5dp">
+
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        app:srcCompat="@mipmap/wcard"
+        android:id="@+id/imageView" />
+
+    <TextView
+        android:id="@+id/cardName"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:text="Jajka"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="30dp"
+        android:textStyle="italic"
+        android:layout_alignBottom="@+id/imageView"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true" />
+
+</RelativeLayout>
