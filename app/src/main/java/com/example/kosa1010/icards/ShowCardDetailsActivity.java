@@ -32,11 +32,9 @@ public class ShowCardDetailsActivity extends AppCompatActivity {
         Card card = OrmCardsRepository.findById(this, id);
         setTitle("Karta " + card.getName());
         TextView cardNumber = (TextView) findViewById(R.id.tvCodeNumber);
-        if (BarcodeFormat.valueOf(card.getType()) == BarcodeFormat.QR_CODE) {
-            cardNumber.setVisibility(View.INVISIBLE);
-        } else {
-            cardNumber.setText(card.getCode());
-        }
+        TextView cardNote = (TextView) findViewById(R.id.tvNote);
+        cardNumber.setText(card.getCode());
+        cardNote.setText(card.getNote());
         ImageView im = (ImageView) findViewById(R.id.QRcode);
         try {
             im.setImageBitmap(encodeAsBitmap(card.getCode(), card.getType()));

@@ -19,18 +19,30 @@
         android:layout_height="wrap_content"
         android:text="TextView"
         android:textAlignment="center"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true" />
 
     <ImageView
         android:id="@+id/QRcode"
         android:layout_width="match_parent"
-        android:layout_height="390dp"
+        android:layout_height="300dp"
         android:layout_weight="1"
-        android:padding="20dp"
+        android:padding="0dp"
         android:textAlignment="center"
         app:srcCompat="@mipmap/qrcode"
-        android:layout_above="@+id/tvCodeNumber"
+        android:layout_marginTop="26dp"
+        android:layout_below="@+id/tvCodeNumber"
         android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:id="@+id/tvNote"
+        android:textSize="20dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_below="@+id/QRcode"
+        android:text="" />
 
 </RelativeLayout>

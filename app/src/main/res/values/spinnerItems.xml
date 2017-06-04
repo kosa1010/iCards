@@ -3,6 +3,8 @@
     <string-array name="spinnerItems">
         <item>Vitay</item>
         <item>Tesco ClubCard</item>
-        <item> Inne</item>
+        <item>PayBack</item>
+        <item>Biedronka</item>
+        <item>Inne</item>
     </string-array>
 </resources>

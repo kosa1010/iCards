@@ -38,4 +38,16 @@ public class OrmCardsRepository {
         databaseHelper.getCardDao().delete(card);
     }
 
+    public static void deleteNote(Context context, Card card) {
+        OrmLiteDatabaseHelper databaseHelper = OrmLiteDatabaseHelper.getInstance(context);
+        card.setNote(null);
+        databaseHelper.getCardDao().update(card);
+    }
+
+    public static void addNote(Context context, Card card, String note) {
+        OrmLiteDatabaseHelper databaseHelper = OrmLiteDatabaseHelper.getInstance(context);
+        card.setNote(note);
+        databaseHelper.getCardDao().update(card);
+    }
+
 }

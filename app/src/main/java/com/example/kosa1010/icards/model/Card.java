@@ -27,15 +27,19 @@ public class Card {
     @DatabaseField
     String pass;
 
+    @DatabaseField
+    String note;
+
     public Card() {
     }
 
-    public Card(String name, String type, String code, String login, String pass) {
+    public Card(String name, String type, String code, String login, String pass,String note) {
         this.name = name;
         this.type = type;
         this.code = code;
         this.login = login;
         this.pass = pass;
+        this.note = note;
     }
 
     public long getId() {
@@ -84,5 +88,13 @@ public class Card {
 
     public void setPass(String pass) {
         this.pass = pass;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }

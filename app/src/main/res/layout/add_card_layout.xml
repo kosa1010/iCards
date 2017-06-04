@@ -11,7 +11,10 @@
         android:id="@+id/spinner"
         android:layout_width="match_parent"
         android:layout_height="80dp"
+        android:textSize="20dp"
         android:entries="@array/spinnerItems"
+        android:textAlignment="center"
+        android:textDirection="firstStrong"
         tools:textAlignment="center" />
 
     <ImageButton
@@ -20,7 +23,8 @@
         android:layout_height="160dp"
         android:layout_gravity="center_horizontal"
         android:scaleType="fitCenter"
-        app:srcCompat="@mipmap/qrcode" />
+        android:background="@color/zxing_transparent"
+        app:srcCompat="@mipmap/qr_code" />
 
     <EditText
         android:layout_width="match_parent"

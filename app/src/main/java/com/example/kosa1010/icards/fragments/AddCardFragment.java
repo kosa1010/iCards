@@ -50,9 +50,6 @@ public class AddCardFragment extends Fragment {
         scanQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//            getView().findViewById(R.id.content_vitay);
-//            Intent i = new Intent(getActivity(), VitayActivity.class);
-//            startActivity(i);
                 IntentIntegrator integrator = new IntentIntegrator(getActivity());
                 integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
                 integrator.setCameraId(0);
@@ -70,16 +67,7 @@ public class AddCardFragment extends Fragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-//                if (spinner.getSelectedItem() == spinner.getItemAtPosition(2)) {
-//                    txtLogin.setVisibility(View.GONE);
-//                    txtPass.setVisibility(View.INVISIBLE);
-//                    txtCardName.setVisibility(View.VISIBLE);
-//                } else {
-//                    txtLogin.setVisibility(View.VISIBLE);
-//                    txtPass.setVisibility(View.VISIBLE);
-//                    txtCardName.setVisibility(View.GONE);
-//                }
-                if (spinner.getSelectedItemPosition() == 2) {
+                if (spinner.getSelectedItemPosition() == spinner.getCount() - 1) {
                     txtLogin.setVisibility(View.GONE);
                     txtPass.setVisibility(View.INVISIBLE);
                     txtCardName.setVisibility(View.VISIBLE);
@@ -99,11 +87,11 @@ public class AddCardFragment extends Fragment {
     }
 
     private void addNewCard() {
-        if(spinner.getSelectedItemPosition() != 2){
-         txtCardName.setText(spinner.getSelectedItem().toString());
+        if (spinner.getSelectedItemPosition() != 2) {
+            txtCardName.setText(spinner.getSelectedItem().toString());
         }
         Card card = new Card(txtCardName.getText().toString(), codeFormat,
-                codeContent, txtLogin.getText().toString(), txtPass.getText().toString());
+                codeContent, txtLogin.getText().toString(), txtPass.getText().toString(), null);
         OrmCardsRepository.addCard(getActivity(), card);
         Toast.makeText(getActivity(), "Katra została zapisana", Toast.LENGTH_SHORT).show();
         txtCardName.setText("");

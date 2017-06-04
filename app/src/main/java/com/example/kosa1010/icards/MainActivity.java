@@ -32,6 +32,7 @@ import com.example.kosa1010.icards.fragments.EditCardFragment;
 import com.example.kosa1010.icards.fragments.HomeFragment;
 import com.example.kosa1010.icards.controllers.CircleTransform;
 import com.example.kosa1010.icards.controllers.GetGoogleInf;
+import com.example.kosa1010.icards.fragments.ManageNotesFragment;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.AccountPicker;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -114,6 +115,7 @@ public class MainActivity extends AppCompatActivity
 
         String[] accountInfo = getInfo(s);
         samText.setText(accountInfo[0]);
+        imgProfile.setImageResource(R.mipmap.user);
         if (isOnline()) {
             imgProfile = (ImageView) headerView.findViewById(R.id.avatar);
             URL imageurl = getImage(accountInfo[1]);
@@ -210,6 +212,10 @@ public class MainActivity extends AppCompatActivity
             add = false;
             title = "Edycja karty";
             fm.beginTransaction().replace(R.id.content_frame, new EditCardFragment()).commit();
+        } else {
+            add = false;
+            title = "Notatki";
+            fm.beginTransaction().replace(R.id.content_frame, new ManageNotesFragment()).commit();
         }
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(title);
