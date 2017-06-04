@@ -87,7 +87,7 @@ public class AddCardFragment extends Fragment {
     }
 
     private void addNewCard() {
-        if (spinner.getSelectedItemPosition() != 2) {
+        if (spinner.getSelectedItemPosition() != spinner.getCount() - 1) {
             txtCardName.setText(spinner.getSelectedItem().toString());
         }
         Card card = new Card(txtCardName.getText().toString(), codeFormat,
